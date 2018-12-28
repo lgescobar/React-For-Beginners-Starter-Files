@@ -1,7 +1,12 @@
 import React from 'react';
+import PropTypes from "prop-types";
 import {getFunName} from "../helpers";
 
 class StorePicker extends React.Component {
+  static propTypes = {
+    history: PropTypes.object
+  };
+
   storeNameInput = React.createRef();
 
   // Use field instead of method, because they have the class reference automatically mounted as "this"
