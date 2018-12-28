@@ -1,5 +1,6 @@
 import React from 'react';
 import {formatPrice} from "../helpers";
+import {TransitionGroup, CSSTransition} from 'react-transition-group';
 
 class Order extends React.Component {
   calculateTotal = (orderIds) => orderIds.reduce((subtotal, key) => {
@@ -14,6 +15,14 @@ class Order extends React.Component {
     const fish = this.props.fishes[key];
     const count = this.props.order[key];
     const isAvailable = fish && fish.status === 'available';
+    const transitionOptions = {
+      key,
+      classNames: "order",
+      timeout: {
+        enter: 500,
+        exit: 500
+      }
+    };
 
     // Make sure the fish is loaded before we continue.
     if (!fish) {
@@ -25,18 +34,30 @@ class Order extends React.Component {
 
     if (!isAvailable) {
       return (
-        <li key={key}>
-          Sorry, {fish ? fish.name : 'fish'} is no longer available
-          {removeFromOrderButton}
-        </li>
+        <CSSTransition {...transitionOptions}>
+          <li key={key}>
+            Sorry, {fish ? fish.name : 'fish'} is no longer available
+            {removeFromOrderButton}
+          </li>
+        </CSSTransition>
       )
     }
 
     return (
-      <li key={key}>
-        {count} lbs {fish.name} {formatPrice(fish.price)}
-        {removeFromOrderButton}
-      </li>
+      <CSSTransition {...transitionOptions}>
+        <li key={key}>
+          <span>
+            <TransitionGroup component="span" className="count">
+              <CSSTransition key={count} classNames="count" timeout={{enter: 500, exit: 500}}>
+                <span>{count}</span>
+              </CSSTransition>
+            </TransitionGroup>
+            lbs {fish.name}
+            {formatPrice(fish.price)}
+            {removeFromOrderButton}
+          </span>
+        </li>
+      </CSSTransition>
     )
   };
 
@@ -47,9 +68,9 @@ class Order extends React.Component {
     return (
       <div className="order-wrap">
         <h2>Order</h2>
-        <ul className="order">
+        <TransitionGroup component="ul" className="order">
           {orderIds.map(this.renderOrderLine)}
-        </ul>
+        </TransitionGroup>
         <div className="total">
           Total:&nbsp;
           <strong>{formatPrice(total)}</strong>
