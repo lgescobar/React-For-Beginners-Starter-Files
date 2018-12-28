@@ -20,10 +20,14 @@ class Order extends React.Component {
       return null;
     }
 
+    // Currify function and create with it a custom event handler.
+    const removeFromOrderButton = <button onClick={() => this.props.removeFromOrder(key)}>&times;</button>;
+
     if (!isAvailable) {
       return (
         <li key={key}>
           Sorry, {fish ? fish.name : 'fish'} is no longer available
+          {removeFromOrderButton}
         </li>
       )
     }
@@ -31,6 +35,7 @@ class Order extends React.Component {
     return (
       <li key={key}>
         {count} lbs {fish.name} {formatPrice(fish.price)}
+        {removeFromOrderButton}
       </li>
     )
   };
