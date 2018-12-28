@@ -86,7 +86,7 @@ class App extends React.Component {
         {/* Spread passes all properties under the same name. Try to avoid it! */}
         {/* <Order {...this.state}/> */}
         <Order order={this.state.order} fishes={this.state.fishes}/>
-        <Inventory addFish={this.addFish} loadSampleFishes={this.loadSampleFishes}/>
+        <Inventory fishes={this.state.fishes} addFish={this.addFish} loadSampleFishes={this.loadSampleFishes}/>
       </div>
     )
   }
