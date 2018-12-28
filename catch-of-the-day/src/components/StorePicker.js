@@ -10,16 +10,23 @@ class StorePicker extends React.Component {
     e.preventDefault();
 
     // 2. Get text from input.
-    console.log(this.storeNameInput);
+    const storeName = this.storeNameInput.current.value;
 
-    // 3. Change page to "/store/WHATEVER_THEY_ENTERED"
+    /*
+     * 3. Change page to "/store/WHATEVER_THEY_ENTERED"
+     *
+     * Used the history prop inherited directly from the router component (because the store picker ist a direct
+     * descendant of it). This allows us to change the URL using push states and avoid a page refresh.
+     * The router then picks up and change the rendered component according to the new URL.
+     */
+    this.props.history.push(`/store/${storeName}`);
   };
 
   render() {
     return (
       <form action="" className="store-selector" onSubmit={this.goToStore}>
         <h2>Please enter a store</h2>
-        <input ref={this.storeNameInput} type="text" required placeholder="Store Name" defaultValue={getFunName()}/>
+        <input type="text" ref={this.storeNameInput} required placeholder="Store Name" defaultValue={getFunName()}/>
         <button type="submit">Visit Store &rarr;</button>
       </form>
     )
