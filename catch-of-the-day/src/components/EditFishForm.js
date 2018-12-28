@@ -1,28 +1,18 @@
 import React from 'react';
 
 class EditFishForm extends React.Component {
-  nameRef = React.createRef();
-  priceRef = React.createRef();
-  statusRef = React.createRef();
-  descRef = React.createRef();
-  imageRef = React.createRef();
-
-  modifyFish = (e) => {
+  handleModifyFish = (e) => {
     e.preventDefault();
-    return;
 
-    // const fish = {
-    //   name: this.nameRef.current.value,
-    //   price: this.priceRef.current.value,
-    //   status: this.statusRef.current.value,
-    //   desc: this.descRef.current.value,
-    //   image: this.imageRef.current.value
-    // };
-    //
-    // this.props.addFish(fish);
-    //
-    // // Reset the form after adding the new fish.
-    // e.currentTarget.reset();
+    // 1. Take a copy of the current fish and override it with changed property.
+    const updatedFish = {
+      ...this.props.fish,
+      // Computed property name + override changed property (wombo combo!)
+      [e.currentTarget.name]: e.currentTarget.value
+    };
+
+    // 2. Let changes "swim up" to where the state lives.
+    this.props.modifyFish(this.props.index, updatedFish);
   };
 
   render() {
@@ -30,16 +20,37 @@ class EditFishForm extends React.Component {
 
     return (
       <div className="fish-edit">
-        {/*onSubmit={this.modifyFish}*/}
-        <input name="name" ref={this.nameRef} type="text" placeholder="Name" defaultValue={name}/>
-        <input name="price" ref={this.priceRef} type="text" placeholder="Price" defaultValue={price}/>
-        <select name="status" ref={this.statusRef} defaultValue={status}>
+        <input
+          name="name"
+          type="text"
+          placeholder="Name"
+          onChange={this.handleModifyFish}
+          value={name}
+        />
+        <input
+          name="price"
+          type="text"
+          placeholder="Price"
+          onChange={this.handleModifyFish}
+          value={price}
+        />
+        <select name="status" onChange={this.handleModifyFish} value={status}>
           <option value="available">Fresh!</option>
           <option value="unavailable">Sold Out!</option>
         </select>
-        <textarea name="desc" ref={this.descRef} placeholder="Description" defaultValue={desc}/>
-        <input name="image" ref={this.imageRef} type="text" placeholder="Image" defaultValue={image}/>
-        {/*<button type="submit">+ Add Fish</button>*/}
+        <textarea
+          name="desc"
+          placeholder="Description"
+          onChange={this.handleModifyFish}
+          value={desc}
+        />
+        <input
+          name="image"
+          type="text"
+          placeholder="Image"
+          onChange={this.handleModifyFish}
+          value={image}
+        />
       </div>
     )
   }

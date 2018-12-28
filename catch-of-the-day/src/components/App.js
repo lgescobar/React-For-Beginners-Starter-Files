@@ -38,7 +38,6 @@ class App extends React.Component {
   }
 
   addFish = (fish) => {
-    console.log("Adding a fish!", fish);
     /*
      * 1. Take a copy of the existing state.
      *
@@ -54,6 +53,17 @@ class App extends React.Component {
      *
      * Note: We shall just pass the piece of state that we want to update!
      */
+    this.setState({fishes});
+  };
+
+  modifyFish = (key, fish) => {
+    // 1. Take a copy of the existing state.
+    const fishes = {...this.state.fishes};
+
+    // 2. Override (partially) copied state with given fish.
+    fishes[key] = fish;
+
+    // 3. Set the new fishes object to state
     this.setState({fishes});
   };
 
@@ -86,7 +96,12 @@ class App extends React.Component {
         {/* Spread passes all properties under the same name. Try to avoid it! */}
         {/* <Order {...this.state}/> */}
         <Order order={this.state.order} fishes={this.state.fishes}/>
-        <Inventory fishes={this.state.fishes} addFish={this.addFish} loadSampleFishes={this.loadSampleFishes}/>
+        <Inventory
+          fishes={this.state.fishes}
+          addFish={this.addFish}
+          modifyFish={this.modifyFish}
+          loadSampleFishes={this.loadSampleFishes}
+        />
       </div>
     )
   }
