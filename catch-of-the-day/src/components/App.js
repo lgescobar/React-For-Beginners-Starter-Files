@@ -67,6 +67,22 @@ class App extends React.Component {
     this.setState({fishes});
   };
 
+  deleteFish = (key) => {
+    // 1. Take a copy of the existing state.
+    const fishes = {...this.state.fishes};
+
+    /*
+     * 2. Remove the fish by key.
+     *
+     * Delete could have been used here, but in order for the firebase sync mechanism to remove the item from the
+     * realtime database, we need to set the key to "null" instead.
+     */
+    fishes[key] = null;
+
+    // 3. Set the new fishes object to state
+    this.setState({fishes});
+  };
+
   loadSampleFishes = () => {
     this.setState({fishes: sampleFishes});
   };
@@ -100,6 +116,7 @@ class App extends React.Component {
           fishes={this.state.fishes}
           addFish={this.addFish}
           modifyFish={this.modifyFish}
+          deleteFish={this.deleteFish}
           loadSampleFishes={this.loadSampleFishes}
         />
       </div>

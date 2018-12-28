@@ -5,7 +5,13 @@ import EditFishForm from "./EditFishForm";
 class Inventory extends React.Component {
   renderFishEditForm = (key) => {
     return (
-      <EditFishForm key={key} index={key} fish={this.props.fishes[key]} modifyFish={this.props.modifyFish}/>
+      <EditFishForm
+        key={key}
+        index={key}
+        fish={this.props.fishes[key]}
+        modifyFish={this.props.modifyFish}
+        deleteFish={this.props.deleteFish}
+      />
     )
   };
 

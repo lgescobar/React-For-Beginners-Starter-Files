@@ -51,6 +51,8 @@ class EditFishForm extends React.Component {
           onChange={this.handleModifyFish}
           value={image}
         />
+        {/* Inline functions are actually not recommended because of little losses in performance. */}
+        <button onClick={() => this.props.deleteFish(this.props.index)}>Remove Fish</button>
       </div>
     )
   }
