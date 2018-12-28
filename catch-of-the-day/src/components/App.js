@@ -14,10 +14,23 @@ class App extends React.Component {
 
   componentDidMount() {
     const {params} = this.props.match;
+
+    // Load order from localStorage (user based, tied to browser)
+    const storedOrder = localStorage.getItem(params.storeId);
+    this.setState({
+      order: JSON.parse(storedOrder)
+    });
+
+    // Activate synchronization between application status and database
     this.ref = base.syncState(`${params.storeId}/fishes`, {
       context: this,
       state: 'fishes'
     });
+  }
+
+  componentDidUpdate() {
+    const {params} = this.props.match;
+    localStorage.setItem(params.storeId, JSON.stringify(this.state.order));
   }
 
   componentWillUnmount() {
