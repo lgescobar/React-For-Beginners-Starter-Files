@@ -77,7 +77,7 @@ class Order extends React.Component {
   };
 
   render() {
-    const orderIds = Object.keys(this.props.order);
+    const orderIds = this.props.order ? Object.keys(this.props.order) : [];
     const total = this.calculateTotal(orderIds);
 
     return (
