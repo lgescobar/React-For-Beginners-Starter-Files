@@ -29,6 +29,14 @@ class Inventory extends React.Component {
     owner: null
   };
 
+  componentDidMount() {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.authHandler({user});
+      }
+    });
+  }
+
   renderFishEditForm = (key) => {
     return (
       <EditFishForm
@@ -42,10 +50,8 @@ class Inventory extends React.Component {
   };
 
   authHandler = async (authData) => {
-    // console.log(authData);
     // 1. Look up the current store in the firebase database.
     const store = await base.fetch(this.props.storeId, {context: this});
-    // console.log(store);
 
     // 2. Claim it if there is no owner.
     if (!store.owner) {
@@ -70,11 +76,35 @@ class Inventory extends React.Component {
       .then(this.authHandler);
   };
 
+  logout = async () => {
+    await firebase.auth().signOut();
+    this.setState({uid: null});
+  };
+
   render() {
     const fishKeys = Object.keys(this.props.fishes);
-    return <Login authenticate={this.authenticate}/>;
+    const logoutButton = <button onClick={this.logout}>Log Out!</button>;
+
+    // 1. Check if the user is logged in.
+    if (!this.state.uid) {
+      return <Login authenticate={this.authenticate}/>;
+    }
+
+    // 2. Check if the logged in user is NOT the owner of the store.
+    if (this.state.uid !== this.state.owner) {
+      return (
+        <div>
+          <p>Sorry, this store doesn't belong to you :(</p>
+          <p>{logoutButton}</p>
+        </div>
+      )
+    }
+
+    // 3. The current user owns the store, show the full inventory.
     return (
       <div className="inventory">
+        <h2>Inventory</h2>
+        <p>{logoutButton}</p>
         {fishKeys.map(this.renderFishEditForm)}
         <AddFishForm addFish={this.props.addFish}/>
         <button onClick={this.props.loadSampleFishes}>Load Sample Fishes</button>
